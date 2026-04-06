@@ -30,7 +30,7 @@ jobs:
         run: echo Hello, world!
       # Run Sonar Checks on the repo
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@main
+        uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: .
           args: 
