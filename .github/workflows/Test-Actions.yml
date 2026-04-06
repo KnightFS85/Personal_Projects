@@ -34,7 +34,7 @@ jobs:
         with:
           projectBaseDir: .
           args: 
-            -Dsonar.projextKey=Personal_Projects
+            -Dsonar.projectKey=Personal_Projects
             -Dsonar.organization=knightfs85
             -Dsonar.host.url=https://sonarcloud.io/
             -Dsonar.login=${{secrets.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}}
