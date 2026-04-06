@@ -1,0 +1,33 @@
+name: Assignment 2
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted   #changed from ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create folder1 and file
+        run: |
+          mkdir -p ~/Desktop/folder1
+          echo "Hello DevOps" > ~/Desktop/folder1/file.txt
+
+      - name: Create folder2
+        run: |
+          mkdir -p ~/Desktop/folder2
+
+      - name: Copy file from folder1 to folder2
+        run: |
+          cp ~/Desktop/folder1/file.txt ~/Desktop/folder2/
+
+      - name: Verify files (log output)
+        run: |
+          echo "Checking folder1:"
+          ls ~/Desktop/folder1
+          echo "Checking folder2:"
+          ls ~/Desktop/folder2
