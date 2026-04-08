@@ -39,7 +39,6 @@ public class app {
                 out.println();
                 out.write(body);
                 out.flush();
-                server.close();
             }
         }
     }
