@@ -29,7 +29,8 @@ jobs:
       # ---------------------------
       - name: Compile Java
         run: |
-          javac app.java calculator.java
+          mkdir -p build/classes
+          javac -d build/classes app.java calculator.java
 
       # ---------------------------
       # Upload Artifacts (both files)
@@ -39,8 +40,7 @@ jobs:
         with:
           name: java-build
           path: |
-            app.class
-            calculator.class
+            build/classes
 
       # ---------------------------
       # Sonar Qube Code Scanning
@@ -54,6 +54,7 @@ jobs:
             -Dsonar.projectKey=KnightFS85_Personal_Projects
             -Dsonar.organization=knightfs85
             -Dsonar.host.url=https://sonarcloud.io/
+            -Dsonar.java.binaries=build/classes
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
       # ---------------------------
