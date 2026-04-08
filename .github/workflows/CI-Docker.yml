@@ -14,6 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       # Versioning (v1, v2, v3...)
       - name: Set Version
         run: echo "VERSION=v${{ github.run_number }}" >> $GITHUB_ENV
@@ -37,22 +43,39 @@ jobs:
             calculator.class
 
       # ---------------------------
+      # Sonar Qube Code Scanning
+      # ---------------------------
+      # Run Sonar Checks on the repo
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
+          args: 
+            -Dsonar.projectKey=KnightFS85_Personal_Projects
+            -Dsonar.organization=knightfs85
+            -Dsonar.host.url=https://sonarcloud.io/
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      # ---------------------------
       # Docker Login
       # ---------------------------
-      - name: Docker Login
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
 
       # ---------------------------
       # Build Docker Image
       # ---------------------------
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/java-ci-docker:${{ env.VERSION }} .
+          docker build -t ${{ secrets.DOCKER_REPONAME }}/java-ci-docker:${{ env.VERSION }} .
 
       # ---------------------------
       # Push Docker Image
       # ---------------------------
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/java-ci-docker:${{ env.VERSION }}
+          docker push ${{ secrets.DOCKER_REPONAME }}/java-ci-docker:${{ env.VERSION }}
